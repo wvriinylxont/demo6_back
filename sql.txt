@@ -16,7 +16,8 @@ create table members (
 	join_day date,
 	role varchar2(15 char),
 	levels varchar2(15 char),
-	profile varchar2(15 char),
+	-- 이미지를 base64인코딩해서 저장
+	profile clob,
 	is_lock number(1),
     failed_attempts number(1),
 	constraint members_pk_username primary key(username)

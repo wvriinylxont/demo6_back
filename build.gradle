@@ -31,6 +31,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     */
 
+    // 랜덤한 문자열(임시비밀번호) 생성
+    implementation("org.apache.commons:commons-lang3:3.17.0")
     // log4jdbc
     implementation("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
     // rest api 자동 문서화 도구

@@ -33,7 +33,7 @@ public class MemberController {
   }
 
   @Operation(summary="회원가입", description="회원가입 및 프로필 사진 업로드")
-  @PostMapping("/api/members/new")
+  @PostMapping(value="/api/members/new", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Member> signup(@ModelAttribute @Valid MemberDto.Create dto, BindingResult br) {
     Member member = service.signup(dto);
     return ResponseEntity.status(200).body(member);
@@ -45,6 +45,15 @@ public class MemberController {
     Optional<String> result = service.searchUseraname(email);
     if(result.isPresent())
       return ResponseEntity.ok(result.get());
+    return ResponseEntity.status(HttpStatus.CONFLICT).body("사용자를 찾을 수 없습니다");
+  }
+
+  @Operation(summary="임시비밀번호 발급", description="아이디와 이메일로 임시비밀번호를 발급")
+  @PutMapping("/api/members/password")
+  public ResponseEntity<String> getTemporaryPassword(@ModelAttribute @Valid MemberDto.GeneratePassword dto, BindingResult br) {
+    Optional<String> 임시비밀번호 = service.getTemporaryPassword(dto);
+    if(임시비밀번호.isPresent())
+      return ResponseEntity.ok(임시비밀번호.get());
     return ResponseEntity.status(HttpStatus.CONFLICT).body("사용자를 찾을 수 없습니다");
   }
 }
