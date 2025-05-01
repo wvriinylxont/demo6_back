@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import java.time.*;
@@ -10,6 +11,7 @@ import java.time.*;
 @Builder
 public class Member {
   private String username;
+  @JsonIgnore
   private String password;
   private String email;
     // 프로필사진 이름

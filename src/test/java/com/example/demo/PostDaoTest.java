@@ -11,7 +11,7 @@ public class PostDaoTest {
   @Autowired
   private PostDao postDao;
 
-  @Test
+  //@Test
   public void 글때려박기() {
     for(int i=0; i<1; i++) {
       Post p = Post.builder().title(i+"번째글").content("내용없음").writer("spring").build();
@@ -26,5 +26,10 @@ public class PostDaoTest {
 
     // pageno가 13이면 3~1번까지 출력
     postDao.findAll(13,10).forEach(post->System.out.println(post.getPno()));
+  }
+
+  @Test
+  public void findByPnoWithCommentsTest() {
+    System.out.println(postDao.findByPnoWithComments(10));
   }
 }
