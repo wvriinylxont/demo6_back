@@ -6,6 +6,7 @@ import com.example.demo.entity.*;
 import com.example.demo.util.*;
 import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
 
@@ -16,6 +17,8 @@ import java.util.*;
 public class MemberService {
   @Autowired
   private MemberDao memberDao;
+  @Autowired
+  private PasswordEncoder encoder;
 
   public boolean checkUsername(MemberDto.UsernameCheck dto) {
     return !memberDao.existsByUsername(dto.getUsername());
@@ -23,7 +26,7 @@ public class MemberService {
 
   public Member signup(MemberDto.Create dto) {
     // 1. 비밀번호 암호화
-    String encodedPassword = dto.getPassword();
+    String encodedPassword = encoder.encode(dto.getPassword());
     // 2. 프사를 업로드했다면 저장을 위해 base64 인코딩
     MultipartFile profile = dto.getProfile();
     String base64Image = "";
