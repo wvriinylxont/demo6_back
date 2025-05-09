@@ -2,6 +2,7 @@ package com.example.demo;
 
 import lombok.*;
 import org.springframework.context.annotation.*;
+import org.springframework.security.config.annotation.method.configuration.*;
 import org.springframework.security.config.annotation.web.builders.*;
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.crypto.password.*;
@@ -10,6 +11,7 @@ import org.springframework.security.web.access.*;
 import org.springframework.security.web.authentication.*;
 import org.springframework.security.web.authentication.logout.*;
 
+@EnableMethodSecurity(securedEnabled=true)
 @Configuration
 // final로 선언한 필드를 대상으로 하는 생성자를 만들어준다 - 스프링에서 생성자를 이용해 객체를 주입할 때 사용가능
 @RequiredArgsConstructor

@@ -1,14 +1,17 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.*;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import java.time.*;
+import java.time.temporal.*;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class Member {
   private String username;
   @JsonIgnore
@@ -29,4 +32,16 @@ public class Member {
   private int failedAttempts = 0;
   @Builder.Default
   private boolean isLock = false;
+
+  public MemberDto.Read toRead() {
+    long days = ChronoUnit.DAYS.between(joinDay, LocalDate.now());
+    return new MemberDto.Read(username, email, profile, joinDay, days, level);
+  }
 }
+
+
+
+
+
+
+

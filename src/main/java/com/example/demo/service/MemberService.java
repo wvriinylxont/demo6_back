@@ -4,6 +4,7 @@ import com.example.demo.dao.*;
 import com.example.demo.dto.*;
 import com.example.demo.entity.*;
 import com.example.demo.util.*;
+import jakarta.validation.*;
 import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.crypto.password.*;
@@ -27,15 +28,20 @@ public class MemberService {
   public Member signup(MemberDto.Create dto) {
     // 1. 비밀번호 암호화
     String encodedPassword = encoder.encode(dto.getPassword());
-    // 2. 프사를 업로드했다면 저장을 위해 base64 인코딩
+    // 2. 프사를 업로드했으면 인코딩, 업로드하지 않았으면 기본 프사를 저장
     MultipartFile profile = dto.getProfile();
+    // 프론트에 <input type='file' name='profile'>이 없다면 profile이 null이 된다
+    // 이 경우 profile.isEmpty()는 null pointer exception(NPE)
+    boolean 프사_존재 = profile!=null && !profile.isEmpty();
     String base64Image = "";
-    if(!profile.isEmpty()) {
-      try {
+    try {
+      if(프사_존재) {
         base64Image = Demo6Util.convertToBase64(profile);
-      } catch(IOException e) {
-        e.printStackTrace();
+      } else {
+        base64Image = Demo6Util.getDefaultBase64Profile();
       }
+    } catch(IOException e) {
+      base64Image = Demo6Util.getDefaultBase64Profile();
     }
     // 3. 암호화된 비밀번호, base64이미지를 가지고 dto를 member로 변환
     Member member = dto.toEntity(encodedPassword, base64Image);
@@ -59,6 +65,24 @@ public class MemberService {
     String newPassword = RandomStringUtils.secure().nextAlphanumeric(20);
     memberDao.updatePassword(dto.getUsername(), newPassword);
     return Optional.ofNullable(newPassword);
+  }
+
+  public MemberDto.Read read(String loginId) {
+    Member member = memberDao.findByUsername(loginId);
+    return member.toRead();
+  }
+
+  public boolean changePassword(MemberDto.PasswordChange dto, String loginId) {
+    // 기존 암호화된 비밀번호를 읽어와 비밀번호가 맞는 지 확인 -> 틀리면 false
+    String encodedPassword = memberDao.findPasswordByUsername(loginId);
+    if(!encoder.matches(dto.getCurrentPassword(), encodedPassword))
+      return false;
+    // 비밀번호가 일치한 경우 새 비밀번호로 업데이트
+    return memberDao.updatePassword(loginId, encoder.encode(dto.getNewPassword()))==1;
+  }
+
+  public void resign(String loginId) {
+    memberDao.delete(loginId);
   }
 }
 
