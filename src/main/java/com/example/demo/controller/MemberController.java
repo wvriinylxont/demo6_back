@@ -10,7 +10,6 @@ import jakarta.validation.constraints.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.*;
-import org.springframework.security.core.*;
 import org.springframework.validation.*;
 import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
@@ -90,7 +89,7 @@ public class MemberController {
   @PreAuthorize("isAuthenticated()")
   @Operation(summary = "회원 탈퇴", description = "로그아웃시킨 후 회원 탈퇴")
   @DeleteMapping("/api/members/member")
-  public ResponseEntity<String> resgin(Principal principal, HttpSession session) {
+  public ResponseEntity<String> resign(Principal principal, HttpSession session) {
     service.resign(principal.getName());
     session.invalidate();
     return ResponseEntity.ok("회원 탈퇴");

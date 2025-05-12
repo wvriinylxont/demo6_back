@@ -74,6 +74,7 @@ public class MemberDto {
     @Pattern(regexp="^[a-zA-Z0-9]{6,10}$")
     private String newPassword;
   }
+
 }
 
 
