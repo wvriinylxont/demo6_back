@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.cart.CartItemDao">
+	<resultMap id="CartResultMap" type="Cart">
+		<id property="userId" column="user_id"/>
+		<collection property="items" ofType="CartItem" resultMap="CartItemResultMap"/>
+	</resultMap>
+
+	<resultMap id="CartItemResultMap" type="CartItem">
+		<id property="cartItemId" column="cart_item_id"/>
+		<result property="cartId" column="cart_id"/>
+		<result property="productId" column="product_id"/>
+		<result property="quantity" column="quantity"/>
+		<result property="price" column="price"/>
+	</resultMap>
+
+	<select id="findCart" resultMap="CartResultMap">
+		select * from carts where username=#{username}
+	</select>
+</mapper>
