@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.*;
 import org.springframework.stereotype.*;
 
 import java.io.*;
+import java.util.*;
 
 @Component
 public class Demo6AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -21,7 +22,10 @@ public class Demo6AuthenticationSuccessHandler implements AuthenticationSuccessH
     String loginId = authentication.getName();
     memberDao.reset로그인실패횟수(loginId);
 
-    ResponseUtil.sendJsonResponse(response, 200, loginId);
+    // JSON 응답 생성
+    Map<String, String> responseBody = new HashMap<>();
+    responseBody.put("username", loginId);
+    ResponseUtil.sendJsonResponse(response, 200, responseBody);
   }
 }
 
