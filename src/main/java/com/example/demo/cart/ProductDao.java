@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.*;
 
-@Mapper
+//@Mapper
 public interface ProductDao {
   Optional<Product> findByPNo(int pno);
 }
