@@ -26,13 +26,13 @@ public class PostService {
     return Demo6Util.getPages(pageno, pagesize, BLOCK_SIZE, totalcount, posts);
   }
 
-  public Map<String,Object> findByPno(int pno, String loginId) {
+  public PostDto.Read findByPno(int pno, String loginId) {
     // Consumer : 입력은 있고, 출력은 없다
     // Supplier : 입력은 없고, 출력은 있다 -> 예외를 발생
-    Map<String,Object> post = postDao.findByPnoWithComments(pno).orElseThrow(()->new EntityNotFoundException("글을 찾을 수 없습니다"));
-    if(loginId!=null && !post.get("writer").equals(loginId)) {
-      postDao.increaseReadCnt(pno);
-    }
+    PostDto.Read post = postDao.findByPnoWithComments(pno).orElseThrow(()->new EntityNotFoundException("글을 찾을 수 없습니다"));
+//    if(loginId!=null && !post.getWriter().equals(loginId)) {
+//      postDao.increaseReadCnt(pno);
+//    }
     return post;
   }
 

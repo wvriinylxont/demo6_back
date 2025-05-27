@@ -19,7 +19,8 @@ public interface PostDao {
 
   Optional<Post> findByPno(int pno);
 
-  Optional<Map<String,Object>> findByPnoWithComments(int pno);
+
+  Optional<PostDto.Read> findByPnoWithComments(int pno);
 
   @Update("update posts set title=#{title}, content=#{content} where pno=#{pno}")
   int update(PostDto.Update dto);

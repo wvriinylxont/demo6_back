@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -43,5 +44,21 @@ public class PostDto {
     private String title;
     @NotEmpty
     private String content;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class Read {
+    private Integer pno;
+    private String title;
+    private String content;
+    private String writer;
+    @JsonFormat(pattern="yyyy년 MM월 dd일 hh:mm:ss")
+    private LocalDateTime writeTime;
+    private Integer readCnt;
+    private Integer goodCnt;
+    private Integer badCnt;
+    private List<Comment> comments;
   }
 }

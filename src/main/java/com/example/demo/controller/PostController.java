@@ -31,7 +31,7 @@ public class PostController {
 
   @Operation(summary="글읽기", description="글읽기")
   @GetMapping("/posts/post")
-  public ResponseEntity<Map<String,Object>> findByPno(@RequestParam int pno, Principal principal) {
+  public ResponseEntity<PostDto.Read> findByPno(@RequestParam int pno, Principal principal) {
     String loginId = principal==null? null : principal.getName();
     return ResponseEntity.ok(service.findByPno(pno, loginId));
   }
