@@ -7,7 +7,8 @@ import java.util.*;
 
 @Mapper
 public interface CommentDao {
-  @Insert("insert into comments(cno, content, writer, pno, write_time) values(comments_seq.nextval, #{content}, #{writer}, #{pno}, sysdate)")
+  @Insert("insert into comments(cno, content, writer, pno, write_time) values(comments_seq.nextval, #{content}, #{writer}, #{pno}, #{writeTime})")
+
   public int save(Comment comment);
 
   @Select("select * from comments where pno=#{pno} order by cno desc")
