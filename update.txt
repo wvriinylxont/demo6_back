@@ -2,3 +2,4 @@
 2. sysdate가 아닌 LocalDateTime.now()로
 3. PostDto.Read로
 4. PostController들의 url 수정
+5. 조회수 증가 수정

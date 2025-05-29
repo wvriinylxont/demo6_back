@@ -30,9 +30,10 @@ public class PostService {
     // Consumer : 입력은 있고, 출력은 없다
     // Supplier : 입력은 없고, 출력은 있다 -> 예외를 발생
     PostDto.Read post = postDao.findByPnoWithComments(pno).orElseThrow(()->new EntityNotFoundException("글을 찾을 수 없습니다"));
-//    if(loginId!=null && !post.getWriter().equals(loginId)) {
-//      postDao.increaseReadCnt(pno);
-//    }
+    if(loginId!=null && !post.getWriter().equals(loginId)) {
+      postDao.increaseReadCnt(pno);
+      post.setReadCnt(post.getReadCnt()+1);
+    }
     return post;
   }
 
