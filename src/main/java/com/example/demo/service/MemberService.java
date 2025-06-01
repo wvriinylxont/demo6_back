@@ -84,6 +84,11 @@ public class MemberService {
   public void resign(String loginId) {
     memberDao.delete(loginId);
   }
+
+  public boolean checkPassword(String password, String loginId) {
+    String encodedPassword = memberDao.findPasswordByUsername(loginId);
+    return (encoder.matches(password, encodedPassword));
+  }
 }
 
 

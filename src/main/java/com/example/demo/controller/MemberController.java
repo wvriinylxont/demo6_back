@@ -65,6 +65,16 @@ public class MemberController {
     return ResponseEntity.status(HttpStatus.CONFLICT).body("사용자를 찾을 수 없습니다");
   }
 
+  @PreAuthorize("isAuthenticated()")
+  @Operation(summary="비밀번호 확인", description="현재 접속 중인 사용자의 비밀번호를 재확인")
+  @PutMapping("/api/members/check-password")
+  public ResponseEntity<String> checkPassword(@RequestParam String password, Principal principal) {
+    boolean checkSuccess = service.checkPassword(password, principal.getName());
+    if(checkSuccess)
+      return ResponseEntity.ok("비밀번호 확인 성공");
+    return ResponseEntity.status(HttpStatus.CONFLICT).body("비밀번호 확인 실");
+  }
+
   // 내정보보기
   @PreAuthorize("isAuthenticated()")
   @Operation(summary = "내 정보 보기", description = "내 정보 보기")
