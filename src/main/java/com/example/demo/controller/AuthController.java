@@ -15,7 +15,7 @@ public class AuthController {
 	// 로그인한 경우 : 200 + 로그인 아이디
 	// 비로그인 : 409 + null
 	@GetMapping(path="/api/auth/check")
-	public ResponseEntity<Map<String,String>> checkLogin(Principal principal) {
+	public ResponseEntity<Map<String, String>> checkLogin(Principal principal) {
 		if(principal!=null)
 			return ResponseEntity.ok(Map.of("username", principal.getName()));
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
