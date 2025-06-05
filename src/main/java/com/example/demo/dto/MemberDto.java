@@ -37,19 +37,17 @@ public class MemberDto {
     private MultipartFile profile;
 
     // DTO를 엔티티로 변환하는 메소드
-    public Member toEntity(String encodedPassword, String base64Image) {
-      return Member.builder().username(username).password(encodedPassword).email(email).profile(base64Image).build();
+    public Member toEntity(String encodedPassword, String base64Image, String code) {
+      return Member.builder().username(username).password(encodedPassword).email(email).profile(base64Image)
+              .isLock(true).code(code).build();
     }
   }
 
   @Data
-  public static class GeneratePassword {
+  public static class FindByPassword {
     @NotEmpty
     @Pattern(regexp="^[a-z0-9]{6,10}$")
     private String username;
-    @NotEmpty
-    @Email
-    private String email;
   }
 
   @Data
@@ -73,6 +71,14 @@ public class MemberDto {
     @NotEmpty
     @Pattern(regexp="^[a-zA-Z0-9]{6,10}$")
     private String newPassword;
+  }
+
+  @Data
+  public static class CheckPassword {
+    @NotEmpty
+    @Pattern(regexp="^[a-zA-Z0-9]{6,10}$")
+    private String password;
+
   }
 
 }

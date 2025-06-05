@@ -65,28 +65,47 @@ public class MemberService {
     } catch(IOException e) {
       base64Image = Demo6Util.getDefaultBase64Profile();
     }
-    // 3. 암호화된 비밀번호, base64이미지를 가지고 dto를 member로 변환
-    Member member = dto.toEntity(encodedPassword, base64Image);
+    // 3. 암호화된 비밀번호, base64이미지, 랜덤한 체크코드 를 가지고 dto를 member로 변환
+    String code = RandomStringUtils.secure().nextAlphanumeric(20);
+    Member member = dto.toEntity(encodedPassword, base64Image, code);
+
+    // 4. 이메일 발송
+    String checkUrl = "http://localhost:8080/api/members/verify?code=" + code;
+    String html = "<p>가입해주셔서 감사합니다</p>";
+    html += "<p>아래의 링크를 클릭하시면 가입이 완료됩니다</p>";
+    html += "<a href='" + checkUrl + "'>링크</a>";
+
     memberDao.save(member);
+    sendMail("c##spring@icia.com", member.getEmail(), "가입확인메일", html);
     return member;
   }
 
-  public Optional<String> searchUseraname(String email) {
+  public boolean verify(String code) {
+    return memberDao.verfiyCode(code)==1;
+  }
+
+  public Optional<String> searchUsername(String email) {
     return memberDao.findUsernameByEmail(email);
   }
 
-  public Optional<String> getTemporaryPassword(MemberDto.GeneratePassword dto) {
-    // 1. 아이디와 이메일이 일치하는 사용자가 있는 지 확인
-    // 2. 사용자가 없을 경우 비어있는 Optional을 리턴 -> 컨트롤러에서 if문으로 처리
-    // 3. 있을 경우 임시비밀번호를 생성
-    // 4. 임시비밀번호를 암호화해서 업데이트
-    // 5. 비밀번호를 Optional로 리턴
-    boolean isExist = memberDao.existsByUsernameAndEmail(dto);
-    if(!isExist)
-      return Optional.empty();
-    String newPassword = RandomStringUtils.secure().nextAlphanumeric(20);
-    memberDao.updatePassword(dto.getUsername(), newPassword);
-    return Optional.ofNullable(newPassword);
+  public boolean getTemporaryPassword(MemberDto.FindByPassword dto) {
+    Member member = memberDao.findByUsername(dto.getUsername());
+    if(member == null)
+      return false;
+    String newPassword = RandomStringUtils.secure().nextAlphanumeric(10);
+    memberDao.updatePassword(dto.getUsername(), encoder.encode(newPassword));
+
+    String html = "<p>아래 임시번호로 로그인하세요</p>";
+    html +="<p>" + newPassword + "</p>";
+    sendMail("c##spring@icia.com", member.getEmail(), "임시비밀번호", html);
+    return true;
+  }
+
+  public boolean checkPassword(MemberDto.CheckPassword dto, String loginId) {
+    String encodedPassword = memberDao.findPasswordByUsername(loginId);
+    if(encodedPassword == null)
+      return false;
+    return encoder.matches(dto.getPassword(), encodedPassword);
   }
 
   public MemberDto.Read read(String loginId) {

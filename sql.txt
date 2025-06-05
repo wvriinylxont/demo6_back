@@ -18,10 +18,14 @@ create table members (
 	levels varchar2(15 char),
 	-- 이미지를 base64인코딩해서 저장
 	profile clob,
+	-- 처음에 회원가입하면 비활성화. 확인코드를 인증하면 활성화
 	is_lock number(1),
     failed_attempts number(1),
 	constraint members_pk_username primary key(username)
 );
+
+-- 테이블에 컬럼을 추가(제일 마지막에 추가된다)
+alter table members add code varchar2(20);
 
 create table posts (
 	pno number(6),

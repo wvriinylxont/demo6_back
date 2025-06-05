@@ -14,11 +14,11 @@ public interface MemberDao {
 
   int save(Member member);
 
+  @Update("update members set is_lock=0 where code=#{code} and rownum=1")
+  int verfiyCode(String code);
+
   @Select("select username from members where email=#{email} and rownum=1")
   Optional<String> findUsernameByEmail(String email);
-
-  @Select("select count(*) from members where username=#{dto.username} and email=#{dto.email} and rownum=1")
-  boolean existsByUsernameAndEmail(@Param("dto") MemberDto.GeneratePassword dto);
 
   @Update("update members set password=#{newPassword} where username=#{username}")
   int updatePassword(String username, String newPassword);
