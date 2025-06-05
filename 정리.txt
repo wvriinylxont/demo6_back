@@ -21,3 +21,6 @@
     2. 네이버는 쿠키를 까서 sessionid를 찾는다
        sessionid가 없을 경우 새로운 sessionid를 생성해서 쿠키로 기록
     3. 이제 네이버는 요청의 sessionid가 같다면 동일한 사용자로 간주
+
+# 이메일 발송 : SMTP, 이메일 수신 : POP3, IMAP
+# gmail, naver를 사용했는데 ? gamil이나 naver가 대신 해줌

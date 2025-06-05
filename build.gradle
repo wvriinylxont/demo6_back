@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+    // 메일 설정
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'

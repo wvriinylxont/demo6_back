@@ -4,9 +4,13 @@ import com.example.demo.dao.*;
 import com.example.demo.dto.*;
 import com.example.demo.entity.*;
 import com.example.demo.util.*;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.*;
 import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
@@ -20,6 +24,24 @@ public class MemberService {
   private MemberDao memberDao;
   @Autowired
   private PasswordEncoder encoder;
+  @Autowired
+  private JavaMailSender mailSender;
+
+  // 이메일 발송
+  public void sendMail(String 보낸이, String 받는이, String 제목, String 내용) {
+    MimeMessage mimeMessage = mailSender.createMimeMessage();
+    try {
+      MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+      helper.setFrom(보낸이);
+      helper.setTo(받는이);
+      helper.setSubject(제목);
+      // 두번째 파라미터는 html 활성화 여부 <a hre='aaa'>링크</a>
+      helper.setText(내용, true);
+    } catch (MessagingException e) {
+      e.printStackTrace();
+    }
+    mailSender.send(mimeMessage);
+  }
 
   public boolean checkUsername(MemberDto.UsernameCheck dto) {
     return !memberDao.existsByUsername(dto.getUsername());
