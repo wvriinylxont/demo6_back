@@ -116,6 +116,10 @@ public class MemberService {
   public boolean changePassword(MemberDto.PasswordChange dto, String loginId) {
     // 기존 암호화된 비밀번호를 읽어와 비밀번호가 맞는 지 확인 -> 틀리면 false
     String encodedPassword = memberDao.findPasswordByUsername(loginId);
+    System.out.println(dto.getCurrentPassword());
+    System.out.println(dto.getNewPassword());
+    System.out.println(encodedPassword);
+
     if(!encoder.matches(dto.getCurrentPassword(), encodedPassword))
       return false;
     // 비밀번호가 일치한 경우 새 비밀번호로 업데이트
@@ -129,6 +133,17 @@ public class MemberService {
   public boolean checkPassword(String password, String loginId) {
     String encodedPassword = memberDao.findPasswordByUsername(loginId);
     return (encoder.matches(password, encodedPassword));
+  }
+
+  public MemberDto.Read changeProfile(MultipartFile profile, String loginId) {
+    String base64Image = "";
+    try {
+      base64Image = Demo6Util.convertToBase64(profile);
+      memberDao.updateProfile(base64Image, loginId);
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
+    return memberDao.findByUsername(loginId).toRead();
   }
 }
 
