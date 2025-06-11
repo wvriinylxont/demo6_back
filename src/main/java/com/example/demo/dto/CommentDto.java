@@ -6,10 +6,12 @@ import lombok.*;
 
 import java.time.*;
 
+// 객체를 못 만들게 PRIVATE
+// private CommentDto() {} 이거랑 똑같음
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentDto {
     @Data
-    public static class Craete {
+    public static class Create {
         @NotNull
         private Integer pno;
         @NotEmpty
